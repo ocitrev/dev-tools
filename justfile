@@ -2,9 +2,8 @@
 @default:
     just -f "{{ justfile() }}" --list --unsorted
 
+[script]
 install-zig version="0.15.2":
-    #!/usr/bin/env bash
-
     version="{{ version }}"
     archive_file="zig-x86_64-linux-$version.tar.xz"
     install_dir="$HOME/.local/zig"
@@ -23,16 +22,16 @@ install-zig version="0.15.2":
     extract_ok=$?
     rm "/tmp/$archive_file"
 
-    if ((extract_ok != 0)); then
+    if [ "$extract_ok" -ne 0 ]; then
         echo Failed to extract "$archive_file" 1>&2
         exit $extract_ok
     fi
 
-    if [[ ! -d "$bin_path" ]]; then
+    if [ ! -d "$bin_path" ]; then
         mkdir -p "$bin_path"
     fi
 
-    if [[ -L "$zig_bin_symlink" ]]; then
+    if [ -L "$zig_bin_symlink" ]; then
         rm "$zig_bin_symlink"
     fi
 
